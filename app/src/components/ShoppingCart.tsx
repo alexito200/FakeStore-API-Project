@@ -5,55 +5,54 @@ import { removeItemFromCart, clearCart } from '../redux/cartSlice';
 import { useNavigate } from 'react-router-dom';
 
 const ShoppingCart: React.FC = () => {
-  const dispatch: AppDispatch = useDispatch();
-  const cartItems = useSelector((state: RootState) => state.cart.items);
-  const navigate = useNavigate();
+const dispatch: AppDispatch = useDispatch();
+const cartItems = useSelector((state: RootState) => state.cart.items);
+const navigate = useNavigate();
 
-  useEffect(() => {
-    // Store cart data to sessionStorage on any cart update
+useEffect(() => {
     sessionStorage.setItem('cart', JSON.stringify(cartItems));
-  }, [cartItems]);
+}, [cartItems]);
 
-  const totalAmount = cartItems.reduce((acc, item) => acc + item.count, 0);
-  const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.count, 0);
+const totalAmount = cartItems.reduce((acc, item) => acc + item.count, 0);
+const totalPrice = cartItems.reduce((acc, item) => acc + item.price * item.count, 0);
 
-  const handleRemoveItem = (id: number) => {
+const handleRemoveItem = (id: number) => {
     dispatch(removeItemFromCart(id));
-  };
+};
 
-  const handleCheckout = () => {
+const handleCheckout = () => {
     dispatch(clearCart());
     sessionStorage.removeItem('cart');
     alert('Checkout successful!');
-    navigate('/');  // Navigate back to the home page after checkout
-  };
+    navigate('/');
+};
 
-  return (
+return (
     <div>
-      <h2>Shopping Cart</h2>
-      <p>Total Items: {totalAmount}</p>
-      <p>Total Price: ${totalPrice.toFixed(2)}</p>
-      {cartItems.length === 0 ? (
+    <h2>Shopping Cart</h2>
+    <p>Total Items: {totalAmount}</p>
+    <p>Total Price: ${totalPrice.toFixed(2)}</p>
+    {cartItems.length === 0 ? (
         <p>Your cart is empty!</p>
-      ) : (
+    ) : (
         <ul>
-          {cartItems.map((item) => (
+        {cartItems.map((item) => (
             <li key={item.id}>
-              <img src={item.image} alt={item.title} width={50} />
-              <h3>{item.title}</h3>
-              <p>Price: ${item.price}</p>
-              <p>Quantity: {item.count}</p>
-              <button onClick={() => handleRemoveItem(item.id)}>Remove</button>
+            <img src={item.image} alt={item.title} width={50} />
+            <h3>{item.title}</h3>
+            <p>Price: ${item.price}</p>
+            <p>Quantity: {item.count}</p>
+            <button onClick={() => handleRemoveItem(item.id)}>Remove</button>
             </li>
-          ))}
+        ))}
         </ul>
-      )}
-      <button onClick={handleCheckout} disabled={cartItems.length === 0}>
+    )}
+    <button onClick={handleCheckout} disabled={cartItems.length === 0}>
         Checkout
-      </button>
-      <button onClick={() => navigate('/')}>Continue Shopping</button>
+    </button>
+    <button onClick={() => navigate('/')}>Continue Shopping</button>
     </div>
-  );
+);
 };
 
 export default ShoppingCart;

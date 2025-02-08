@@ -1,4 +1,5 @@
 import { useQuery } from 'react-query';
+// import './App.css'
 import { fetchCategories, fetchProducts } from '../api/api';
 import { useState, useEffect } from 'react';
 import { Product } from '../types/types';
@@ -7,7 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { addItemToCart, loadCart } from '../redux/cartSlice';
 import { RootState } from '../redux/store';
 import { FaShoppingCart } from 'react-icons/fa';
-import { Link } from 'react-router-dom';  // Import Link from react-router-dom
+import { Link } from 'react-router-dom';
 
 const Home = () => {
   const { data: products, isLoading, isError } = useQuery({
@@ -44,12 +45,10 @@ const Home = () => {
 
   const filteredProducts = getFilteredProducts();
 
-  // Get the total number of items in the cart from Redux store
   const cartItemsCount = useSelector((state: RootState) =>
     state.cart.items.reduce((acc, item) => acc + item.count, 0)
   );
 
-  // Handle loading and error states
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -60,28 +59,12 @@ const Home = () => {
 
   return (
     <div>
-      {/* Cart Icon with Badge (now clickable) */}
-      <Link to="/cart" style={{ position: 'relative', display: 'inline-block', marginBottom: '20px' }}>
-        <FaShoppingCart size={30} />
-        {cartItemsCount > 0 && (
-          <span
-            style={{
-              position: 'absolute',
-              top: '-5px',
-              right: '-5px',
-              backgroundColor: 'red',
-              color: 'white',
-              borderRadius: '50%',
-              padding: '5px 10px',
-              fontSize: '14px',
-            }}
-          >
-            {cartItemsCount}
-          </span>
-        )}
-      </Link>
+<Link to="/cart" className="cart-container">
+  <FaShoppingCart className="cart-icon" />
+  {cartItemsCount > 0 && <span className="cart-badge">{cartItemsCount}</span>}
+</Link>
 
-      {/* Category Filter */}
+
       <select onChange={(e) => setSelectedCategory(e.target.value)}>
         <option value="">All Categories</option>
         {categories?.data.map((category: string) => (
@@ -91,7 +74,6 @@ const Home = () => {
         ))}
       </select>
 
-      {/* Product List */}
       <div>
         {filteredProducts?.map((product: Product) => (
           <ProductCard key={product.id} product={product} onAddToCart={handleAddToCart} />

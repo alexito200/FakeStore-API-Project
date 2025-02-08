@@ -3,9 +3,9 @@ import cartReducer from './cartSlice';
 
 
 export const store = configureStore({
-  reducer: {
+reducer: {
     cart: cartReducer,
-  },
+},
 });
 
 export type RootState = ReturnType<typeof store.getState>;
