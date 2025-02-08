@@ -1,13 +1,20 @@
-import { Product } from "../types/types"
+import React from 'react';
+import { Product } from '../types/types';
 
-const ProductCard: React.FC<{ product: Product}> = ({ product }) => {
-return (
-    <div>
-        <h3>{ product.title }</h3>
-        <p>{ product.price }</p>
-        <img src={ product.image } alt={ product.title } />
-    </div>
-    )
+interface ProductCardProps {
+  product: Product;
+  onAddToCart: (product: Product) => void;
 }
 
-export default ProductCard
+const ProductCard: React.FC<ProductCardProps> = ({ product, onAddToCart }) => {
+  return (
+    <div>
+      <img src={product.image} alt={product.title} width={100} />
+      <h3>{product.title}</h3>
+      <p>${product.price}</p>
+      <button onClick={() => onAddToCart(product)}>Add to Cart</button>
+    </div>
+  );
+};
+
+export default ProductCard;
