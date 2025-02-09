@@ -13,9 +13,9 @@
       <a href="#usage">Usage</a>
       <ul>
         <li><a href="#home">Home</a></li>
-        <li><a href="#productcard">Product Card</a></li>
-        <li><a href="#shoppingcart">Shopping Cart</a></li>
-        <li><a href="#cartslice">Cart Slice</a></li>
+        <li><a href="#product-card">Product Card</a></li>
+        <li><a href="#shopping-cart">Shopping Cart</a></li>
+        <li><a href="#cart-slice">Cart Slice</a></li>
         <li><a href="#store">Store</a></li>
         <li><a href="#types">Types</a></li>
         <li><a href="#app">App</a></li>
