@@ -5,6 +5,7 @@
 }  
 .cart-icon {
     font-size: 30px;
+    margin: 0px 10px;
 }  
 .cart-badge {
     position: absolute;
@@ -14,5 +15,5 @@
     color: white;
     border-radius: 50%;
     padding: 5px 10px;
-    font-size: 14px;
+    font-size: 10px;
 }  

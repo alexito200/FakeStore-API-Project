@@ -1,5 +1,5 @@
 import { useQuery } from 'react-query';
-// import './App.css'
+import '../App.css'
 import { fetchCategories, fetchProducts } from '../api/api';
 import { useState, useEffect } from 'react';
 import { Product } from '../types/types';
