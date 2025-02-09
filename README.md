@@ -12,22 +12,16 @@
     <li>
       <a href="#usage">Usage</a>
       <ul>
-        <li><a href="#">Home</a></li>
-        <li><a href="#">Product Card</a></li>
-        <li><a href="#">Shopping Cart</a></li>
-        <li><a href="#">Cart Slice</a></li>
-        <li><a href="#">Store</a></li>
-        <li><a href="#">Types</a></li>
-        <li><a href="#">App</a></li>
-        <li><a href="#">Main</a></li>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#productcard">Product Card</a></li>
+        <li><a href="#shoppingcart">Shopping Cart</a></li>
+        <li><a href="#cartslice">Cart Slice</a></li>
+        <li><a href="#store">Store</a></li>
+        <li><a href="#types">Types</a></li>
+        <li><a href="#app">App</a></li>
+        <li><a href="#main">Main</a></li>
       </ul>
     </li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
 </details>
 
 <!-- GETTING STARTED -->
