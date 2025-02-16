@@ -1,3 +1,6 @@
+body {
+    background-color: #7e7e7e;
+}
 .cart-container {
     position: relative;
     display: inline-block;
