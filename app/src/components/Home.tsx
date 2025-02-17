@@ -63,10 +63,16 @@ const Home: React.FC = () => {
 
   return (
     <div className="home">
-      <Link to="/cart" className="cart-container">
-        <FaShoppingCart className="cart-icon" />
-        {cartItemsCount > 0 && <span className="cart-badge">{cartItemsCount}</span>}
-      </Link>
+      <div className="top-navigation">
+        {/* Profile Button */}
+        <Link to="/user-profile" className="profile-button">Profile</Link>
+
+        {/* Cart Icon */}
+        <Link to="/cart" className="cart-container">
+          <FaShoppingCart className="cart-icon" />
+          {cartItemsCount > 0 && <span className="cart-badge">{cartItemsCount}</span>}
+        </Link>
+      </div>
 
       {/* Category Filter Dropdown */}
       <div className="category-filter">

@@ -7,6 +7,7 @@ import Register from './components/Register';
 import AddPage from './components/AddPage';
 import UpdateProduct from './components/UpdateProduct';
 import OrderDetails from './components/OrderDetails';
+import UserProfile from './components/UserProfile';
 
 const queryClient = new QueryClient()
 
@@ -22,6 +23,7 @@ const App = () => {
         <Route path="/add-product" element={<AddPage />} />
         <Route path="/update-product/:id" element={<UpdateProduct />} />
         <Route path="/order-details" element={<OrderDetails />} />
+        <Route path="/user-profile" element={<UserProfile />} />
       </Routes>
       </BrowserRouter>
     </QueryClientProvider>
