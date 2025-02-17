@@ -1,82 +1,97 @@
-import { useQuery } from 'react-query';
-import '../App.css'
-import { fetchCategories, fetchProducts } from '../api/api';
-import { useState, useEffect } from 'react';
-import { Product } from '../types/types';
-import ProductCard from './ProductCard';
-import { useDispatch, useSelector } from 'react-redux';
-import { addItemToCart, loadCart } from '../redux/cartSlice';
-import { RootState } from '../redux/store';
-import { FaShoppingCart } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { RootState } from "../redux/store";
+import { FaShoppingCart } from "react-icons/fa";
+import { Link } from "react-router-dom";
+import { addItemToCart, loadCart } from "../redux/cartSlice";
+import { fetchProducts } from "../components/productService";
+import ProductCard from "./ProductCard";
+import { Product } from "../types/types"; // Ensure Product is imported correctly
+import "../App.css"; // Import the CSS file for styling
 
-const Home = () => {
-  const { data: products, isLoading, isError } = useQuery({
-    queryKey: ['products'],
-    queryFn: fetchProducts
-  });
-
-  const { data: categories } = useQuery({
-    queryKey: ['categories'],
-    queryFn: fetchCategories
-  });
+const Home: React.FC = () => {
+  const [products, setProducts] = useState<Product[]>([]); // Correctly typed as Product[]
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   const dispatch = useDispatch();
 
+  // Load cart from sessionStorage on mount
   useEffect(() => {
-    const savedCart = sessionStorage.getItem('cart');
+    const savedCart = sessionStorage.getItem("cart");
     if (savedCart) {
       dispatch(loadCart(JSON.parse(savedCart)));
     }
   }, [dispatch]);
 
+  // Fetch products from Firestore
+  useEffect(() => {
+    const loadProducts = async () => {
+      try {
+        const productsData = await fetchProducts();
+        setProducts(productsData);
+      } catch (error) {
+        console.error("Error fetching products:", error);
+      }
+    };
+    loadProducts();
+  }, []);
+
   const handleAddToCart = (product: Product) => {
-    dispatch(addItemToCart({ ...product, count: 1 }));
+    dispatch(
+      addItemToCart({
+        id: product.id,
+        name: product.name,
+        price: product.price,
+        image: product.imageUrl || "",
+        count: 1,
+      })
+    );
   };
 
-  const [selectedCategory, setSelectedCategory] = useState('');
-
-  const getFilteredProducts = () => {
-    if (selectedCategory) {
-      return products?.data.filter((product: Product) => product.category === selectedCategory);
-    }
-    return products?.data;
+  // Handle category selection change
+  const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedCategory(event.target.value);
   };
 
-  const filteredProducts = getFilteredProducts();
+  const filteredProducts = selectedCategory
+    ? products.filter((product) => product.category === selectedCategory)
+    : products;
 
   const cartItemsCount = useSelector((state: RootState) =>
     state.cart.items.reduce((acc, item) => acc + item.count, 0)
   );
 
-  if (isLoading) {
-    return <p>Loading...</p>;
-  }
-
-  if (isError) {
-    return <p>Error loading products</p>;
-  }
-
   return (
-    <div>
-<Link to="/cart" className="cart-container">
-  <FaShoppingCart className="cart-icon" />
-  {cartItemsCount > 0 && <span className="cart-badge">{cartItemsCount}</span>}
-</Link>
+    <div className="home">
+      <Link to="/cart" className="cart-container">
+        <FaShoppingCart className="cart-icon" />
+        {cartItemsCount > 0 && <span className="cart-badge">{cartItemsCount}</span>}
+      </Link>
 
+      {/* Category Filter Dropdown */}
+      <div className="category-filter">
+        <label htmlFor="category">Filter by Category: </label>
+        <select id="category" value={selectedCategory} onChange={handleCategoryChange}>
+          <option value="">All Categories</option>
+          <option value="electronics">Electronics</option>
+          <option value="clothing">Clothing</option>
+          <option value="books">Books</option>
+        </select>
+      </div>
 
-      <select onChange={(e) => setSelectedCategory(e.target.value)}>
-        <option value="">All Categories</option>
-        {categories?.data.map((category: string) => (
-          <option key={category} value={category}>
-            {category}
-          </option>
-        ))}
-      </select>
+      {/* Link to Add Product Page */}
+      <Link to="/add-product" className="add-product-link">Add New Product</Link>
 
-      <div>
-        {filteredProducts?.map((product: Product) => (
-          <ProductCard key={product.id} product={product} onAddToCart={handleAddToCart} />
+      {/* Product List */}
+      <div className="product-list">
+        {filteredProducts.map((product: Product) => (
+          <div key={product.id}>
+            <ProductCard product={product} onAddToCart={handleAddToCart} />
+            {/* Update Product Button */}
+            <Link to={`/update-product/${product.id}`}>
+              <button>Update Product</button>
+            </Link>
+          </div>
         ))}
       </div>
     </div>
