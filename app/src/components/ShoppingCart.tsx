@@ -39,12 +39,11 @@ const ShoppingCart: React.FC = () => {
       createdAt: new Date(),
       status: 'pending',
     };
-
+  
     if (user) {
       try {
         await saveOrder(orderData, user.uid);
-        navigate('/order-details', {
-        });
+        navigate('/order-details', { state: { orderData } }); // Pass orderData correctly
       } catch (error) {
         console.error('Error placing order:', error);
       }
@@ -52,6 +51,7 @@ const ShoppingCart: React.FC = () => {
       console.log("User not logged in");
     }
   };
+  
 
   return (
     <div className="shopping-cart">
