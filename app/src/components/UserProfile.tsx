@@ -1,44 +1,39 @@
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 import { getUserProfile, updateUserProfile, deleteUserAccount } from "./userService";
 import { auth } from "../firebaseConfig";
-import { useNavigate } from "react-router-dom";
-import { setUser, clearUser } from "../redux/userSlice"; // Import Redux actions
-import { RootState } from "../redux/store"; // Import RootState from your store setup
-import { UserProfileProps } from "../redux/userSlice"; // UserProfileProps type
+import { setUser, clearUser } from "../redux/userSlice"; 
+import { RootState } from "../redux/store"; 
+import { UserProfileProps } from "../redux/userSlice"; 
+import '../App.css'
 
 const UserProfile: React.FC = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // Use RootState to type the state in the Redux store
   const userProfileFromRedux = useSelector((state: RootState) => state.user.user);
-
-  const [userProfile, setUserProfile] = useState<UserProfileProps | null>(userProfileFromRedux); // Initialize with Redux data
+  const [userProfile, setUserProfile] = useState<UserProfileProps | null>(userProfileFromRedux); 
   const [fullName, setFullName] = useState<string>(userProfileFromRedux?.fullName || "");
   const [address, setAddress] = useState<string>(userProfileFromRedux?.address || "");
   const [error, setError] = useState<string | null>(null);
 
-  // Fetch user profile from Firestore on component mount if not already in Redux
   useEffect(() => {
     if (!userProfileFromRedux) {
       const fetchUserProfile = async () => {
         const user = auth.currentUser;
         if (user) {
           try {
-            // Fetch the document from Firestore
             const profile = await getUserProfile(user.uid);
             if (profile) {
-              // Type assertion to cast DocumentData to UserProfileProps
               const userProfileData: UserProfileProps = {
                 uid: user.uid,
-                email: user.email || "", // Email is optional, but you can handle it here
+                email: user.email || "",
                 fullName: profile.fullName || "",
                 address: profile.address || "",
               };
-              
-              setUserProfile(userProfileData); // Set the state with the typed data
-              dispatch(setUser(userProfileData)); // Update Redux state
+              setUserProfile(userProfileData); 
+              dispatch(setUser(userProfileData)); 
               setFullName(userProfileData.fullName);
               setAddress(userProfileData.address);
             }
@@ -58,11 +53,10 @@ const UserProfile: React.FC = () => {
     const user = auth.currentUser;
     if (user) {
       try {
-        // Update Firestore and Redux state
         await updateUserProfile(user.uid, { fullName, address });
         const updatedProfile = { ...userProfile!, fullName, address };
-        setUserProfile(updatedProfile); // Update local state
-        dispatch(setUser(updatedProfile)); // Update Redux state
+        setUserProfile(updatedProfile); 
+        dispatch(setUser(updatedProfile)); 
         alert("Profile updated successfully!");
       } catch (error) {
         setError("Failed to update profile.");
@@ -76,9 +70,9 @@ const UserProfile: React.FC = () => {
     if (user) {
       try {
         await deleteUserAccount(user.uid);
-        dispatch(clearUser()); // Clear user data from Redux
+        dispatch(clearUser()); 
         alert("Account deleted successfully!");
-        navigate("/"); // Redirect to login page after deletion
+        navigate("/"); 
       } catch (error) {
         setError("Failed to delete account.");
         console.error("Error deleting account:", error);
@@ -86,9 +80,12 @@ const UserProfile: React.FC = () => {
     }
   };
 
-  // Handle Continue Shopping
   const handleContinueShopping = () => {
-    navigate("/home"); // Redirect to home page
+    navigate("/home");
+  };
+
+  const handleGoHome = () => {
+    navigate("/");
   };
 
   return (
@@ -122,9 +119,16 @@ const UserProfile: React.FC = () => {
             Delete Account
           </button>
 
-          {/* Continue Shopping Button */}
           <button className="continue-shopping-btn" onClick={handleContinueShopping}>
             Continue Shopping
+          </button>
+
+          <button className="order-history-button" onClick={() => navigate('/order-history')}>
+            View Order History
+          </button>
+
+          <button className="go-home-btn" onClick={handleGoHome}>
+            Log out
           </button>
         </div>
       ) : (

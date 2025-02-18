@@ -1,13 +1,17 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState, AppDispatch } from '../redux/store';
 import { removeItemFromCart } from '../redux/cartSlice';
 import { useNavigate } from 'react-router-dom';
-import { CartItem } from '../redux/cartSlice'; // ✅ Import CartItem type
+import { CartItem } from '../redux/cartSlice';
+import { saveOrder } from './productService';
 import '../App.css';
+import { Order } from "../types/types";
+import { AuthContext } from "../context/AuthContext";
 
 const ShoppingCart: React.FC = () => {
   const dispatch: AppDispatch = useDispatch();
+  const { user } = useContext(AuthContext) || {};
   const cartItems: CartItem[] = useSelector((state: RootState) => state.cart.items);
   const navigate = useNavigate();
 
@@ -22,15 +26,31 @@ const ShoppingCart: React.FC = () => {
     dispatch(removeItemFromCart(id));
   };
 
-  // Checkout handler - Pass cart data to OrderDetails.tsx
-  const handleCheckout = () => {
-    navigate('/order-details', {
-      state: {
-        cartItems,
-        totalAmount,
-        totalPrice,
-      },
-    });
+  const handleCheckout = async () => {
+    const orderData: Order = {
+      items: cartItems.map((item) => ({
+        name: item.name,
+        price: item.price,
+        imageUrl: item.imageUrl,
+        quantity: item.count,
+      })),
+      totalAmount,
+      totalPrice: totalPrice.toFixed(2),
+      createdAt: new Date(),
+      status: 'pending',
+    };
+
+    if (user) {
+      try {
+        await saveOrder(orderData, user.uid);
+        navigate('/order-details', {
+        });
+      } catch (error) {
+        console.error('Error placing order:', error);
+      }
+    } else {
+      console.log("User not logged in");
+    }
   };
 
   return (
@@ -44,13 +64,15 @@ const ShoppingCart: React.FC = () => {
         <ul className="cart-items-list">
           {cartItems.map((item) => (
             <li key={item.id} className="cart-item">
-              <img src={item.image} alt={item.name} width={50} className="cart-item-image" />
+              <img src={item.imageUrl} alt={item.name} width={50} className="cart-item-image" />
               <div className="cart-item-details">
                 <h3>{item.name}</h3>
                 <p>Price: ${item.price}</p>
                 <p>Quantity: {item.count}</p>
               </div>
-              <button className="remove-button" onClick={() => handleRemoveItem(item.id)}>Remove</button>
+              <button className="remove-button" onClick={() => handleRemoveItem(item.id)}>
+                Remove
+              </button>
             </li>
           ))}
         </ul>
@@ -58,7 +80,9 @@ const ShoppingCart: React.FC = () => {
       <button className="checkout-button" onClick={handleCheckout} disabled={cartItems.length === 0}>
         Checkout
       </button>
-      <button className="continue-shopping-button" onClick={() => navigate('/home')}>Continue Shopping</button>
+      <button className="continue-shopping-button" onClick={() => navigate('/home')}>
+        Continue Shopping
+      </button>
     </div>
   );
 };

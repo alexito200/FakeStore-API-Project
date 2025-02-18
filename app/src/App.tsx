@@ -8,6 +8,7 @@ import AddPage from './components/AddPage';
 import UpdateProduct from './components/UpdateProduct';
 import OrderDetails from './components/OrderDetails';
 import UserProfile from './components/UserProfile';
+import OrderHistory from './components/OrderHistory';
 
 const queryClient = new QueryClient()
 
@@ -24,6 +25,7 @@ const App = () => {
         <Route path="/update-product/:id" element={<UpdateProduct />} />
         <Route path="/order-details" element={<OrderDetails />} />
         <Route path="/user-profile" element={<UserProfile />} />
+        <Route path="/order-history" element={<OrderHistory />} />
       </Routes>
       </BrowserRouter>
     </QueryClientProvider>

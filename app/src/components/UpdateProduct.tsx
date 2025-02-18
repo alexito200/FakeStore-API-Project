@@ -4,6 +4,7 @@ import { updateProduct } from "../components/productService";
 import { Product } from "../types/types";
 import { db } from "../firebaseConfig";
 import { doc, getDoc, deleteDoc } from 'firebase/firestore';
+import '../App.css';
 
 const UpdateProduct: React.FC = () => {
   const { id } = useParams<{ id: string }>();
@@ -14,7 +15,7 @@ const UpdateProduct: React.FC = () => {
     imageUrl: "",
     category: "",
   });
-  const [message, setMessage] = useState<string>(""); // Message state for success or error
+  const [message, setMessage] = useState<string>("");
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -94,7 +95,6 @@ const UpdateProduct: React.FC = () => {
     }
   };
 
-  // Delete product logic
   const handleDelete = async () => {
     if (!id) {
       alert("Product ID is missing");
@@ -104,65 +104,71 @@ const UpdateProduct: React.FC = () => {
     try {
       const productRef = doc(db, "products", id);
       await deleteDoc(productRef);
-      setMessage("Product successfully deleted!"); // Set success message
+      setMessage("Product successfully deleted!");
       navigate("/home");
     } catch (error) {
       console.error("Error deleting product:", error);
-      setMessage("Error deleting product. Please try again."); // Set error message
+      setMessage("Error deleting product. Please try again.");
     }
   };
 
   return (
-    <div>
+    <div className="update-product-container">
       <h2>Update Product</h2>
-      {message && <p>{message}</p>} {/* Render the message */}
+      {message && <p className="message">{message}</p>}
 
       {product ? (
-        <form>
-          <div>
+        <form className="product-form">
+          <div className="form-group">
             <label>Product Name</label>
             <input
               type="text"
               name="name"
               value={newData.name}
               onChange={handleInputChange}
+              className="input-field"
             />
           </div>
-          <div>
+          <div className="form-group">
             <label>Price</label>
             <input
               type="text"
               name="price"
               value={newData.price}
               onChange={handleInputChange}
+              className="input-field"
             />
           </div>
-          <div>
+          <div className="form-group">
             <label>Image URL</label>
             <input
               type="text"
               name="imageUrl"
               value={newData.imageUrl}
               onChange={handleInputChange}
+              className="input-field"
             />
           </div>
-          <div>
+          <div className="form-group">
             <label>Category</label>
             <input
               type="text"
               name="category"
               value={newData.category}
               onChange={handleInputChange}
+              className="input-field"
             />
           </div>
-          <button type="button" onClick={handleUpdate}>Update Product</button>
+          <button type="button" onClick={handleUpdate} className="update-btn">
+            Update Product
+          </button>
         </form>
       ) : (
         <p>Loading product details...</p>
       )}
 
-      <button onClick={handleDelete}>Delete Product</button>
-      <button onClick={() => navigate("/home")}>Go Back to Home</button>
+      <button onClick={handleDelete} className="delete-btn">Delete Product</button>
+      <button onClick={() => navigate("/home")} className="back-btn">Continue Shopping</button>
     </div>
   );
 };

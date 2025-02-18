@@ -1,37 +1,31 @@
-// Login.tsx
 import { useState, FormEvent, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { signInWithEmailAndPassword, signOut } from "firebase/auth";
 import { auth } from "../firebaseConfig";
 import { Link } from "react-router-dom";
-import { useDispatch } from "react-redux"; // Import useDispatch
-import { setUser, clearUser } from "../redux/userSlice"; // Import setUser and clearUser actions
-import { getUserProfile } from "./userService"; // Import getUserProfile function
-import { UserProfileProps } from "../redux/userSlice"; // Adjust path as needed
+import { useDispatch } from "react-redux";
+import { setUser, clearUser } from "../redux/userSlice";
+import { getUserProfile } from "./userService";
+import { UserProfileProps } from "../redux/userSlice";
+import '../App.css'
 
 const Login = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const navigate = useNavigate();
-  const dispatch = useDispatch(); // Initialize dispatch
+  const dispatch = useDispatch();
 
-  // Fetch user profile and update Redux and localStorage
-// In Login.tsx
-
-const handleLogin = async (e: FormEvent) => {
+  const handleLogin = async (e: FormEvent) => {
     e.preventDefault();
     try {
       const userCredential = await signInWithEmailAndPassword(auth, email, password);
       const user = userCredential.user;
   
-      // Ensure the user is authenticated
       if (user) {
-        // Fetch user profile by passing user.uid as argument
         const profile = await getUserProfile(user.uid);
   
         if (profile) {
-          // Assert that the profile conforms to UserProfile type
           const userProfile: UserProfileProps = {
             uid: user.uid,
             email: user.email || "",
@@ -39,10 +33,7 @@ const handleLogin = async (e: FormEvent) => {
             address: profile.address || "",
           };
   
-          // Store user data in Redux
           dispatch(setUser(userProfile));
-  
-          // Save user data to localStorage
           localStorage.setItem("userProfile", JSON.stringify(userProfile));
   
           alert("Login successful!");
@@ -57,13 +48,12 @@ const handleLogin = async (e: FormEvent) => {
       }
     }
   };
-  
 
   const handleLogout = async () => {
     try {
       await signOut(auth);
-      dispatch(clearUser()); // Clear user data from Redux
-      localStorage.removeItem("userProfile"); // Remove user data from localStorage
+      dispatch(clearUser());
+      localStorage.removeItem("userProfile");
       alert("Logged out!");
       navigate("/login");
     } catch (err: unknown) {
@@ -83,26 +73,29 @@ const handleLogin = async (e: FormEvent) => {
   }, [dispatch]);
 
   return (
-    <>
-      <form onSubmit={handleLogin}>
+    <div className="login-container">
+      <form className="login-form" onSubmit={handleLogin}>
+        <h2>Login</h2>
         <input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
+          className="input-field"
         />
         <input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
+          className="input-field"
         />
-        <button type="submit">Login</button>
-        {error && <p>{error}</p>}
+        <button type="submit" className="login-btn">Login</button>
+        {error && <p className="error-message">{error}</p>}
       </form>
-      <button onClick={handleLogout}>Logout</button>
-      <Link to="/register">Create Account</Link>
-    </>
+      <button onClick={handleLogout} className="logout-btn">Logout</button>
+      <Link to="/register" className="register-link"><button>Create Account</button></Link>
+    </div>
   );
 };
 

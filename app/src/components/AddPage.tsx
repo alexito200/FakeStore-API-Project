@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { addProduct } from "../components/productService";
-import { Product } from "../types/types"; // Ensure Product is imported correctly
+import { Product } from "../types/types";
 import { useNavigate } from "react-router-dom";
+import "../App.css";
 
 const AddPage: React.FC = () => {
   const [newProduct, setNewProduct] = useState<Product>({
@@ -23,8 +24,8 @@ const AddPage: React.FC = () => {
     try {
       await addProduct(newProduct.name, newProduct.price, newProduct.imageUrl, newProduct.category);
       alert("Product added successfully!");
-      setNewProduct({ id:"", name: "", price: 0, imageUrl: "", category: "" }); // Clear form
-      navigate("/home"); // Redirect back to Home page or desired page
+      setNewProduct({ id: "", name: "", price: 0, imageUrl: "", category: "" });
+      navigate("/home");
     } catch (error) {
       console.error("Error adding product:", error);
     }
@@ -58,6 +59,7 @@ const AddPage: React.FC = () => {
         onChange={(e) => setNewProduct({ ...newProduct, category: e.target.value })}
       />
       <button onClick={handleAddProduct}>Add Product</button>
+      <button className="go-home-button" onClick={() => navigate("/home")}>Go to Home</button>
     </div>
   );
 };

@@ -1,18 +1,17 @@
 import { useState, FormEvent } from "react";
-import { useNavigate } from "react-router-dom"; // Import useNavigate
+import { useNavigate } from "react-router-dom";
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { auth } from "../firebaseConfig";
 import { Link } from "react-router-dom";
-import { 
-    createUserProfile 
-} from "./userService";
+import { createUserProfile } from "./userService";
+import '../App.css';
 
 const Register = () => {
     const [email, setEmail] = useState<string>("");
     const [password, setPassword] = useState<string>("");
     const [fullName, setFullName] = useState<string>("");
     const [error, setError] = useState<string | null>(null);
-    const navigate = useNavigate(); // Initialize navigate function
+    const navigate = useNavigate();
 
     const handleRegister = async (e: FormEvent) => {
         e.preventDefault();
@@ -26,7 +25,6 @@ const Register = () => {
 
             alert("Registration successful! User data saved.");
             
-            // Redirect to login page after the alert
             navigate("/");
         } catch (err: unknown) {
             if (err instanceof Error) {
@@ -38,14 +36,16 @@ const Register = () => {
     };
 
     return (
-        <div>
-            <form onSubmit={handleRegister}>
+        <div className="register-container">
+            <form className="register-form" onSubmit={handleRegister}>
+                <h2>Create an Account</h2>
                 <input
                     type="text"
                     placeholder="Full Name"
                     value={fullName}
                     onChange={(e) => setFullName(e.target.value)}
                     required
+                    className="input-field"
                 />
                 <input
                     type="email"
@@ -53,6 +53,7 @@ const Register = () => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     required
+                    className="input-field"
                 />
                 <input
                     type="password"
@@ -60,12 +61,12 @@ const Register = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
+                    className="input-field"
                 />
-                <button type="submit">Register</button>
+                <button type="submit" className="register-btn">Register</button>
+                {error && <p className="error-message">{error}</p>}
             </form>
-
-            <Link to="/">Login</Link>
-            {error && <p>{error}</p>}
+            <Link to="/" className="login-link">Already have an account? Login</Link>
         </div>
     );
 };

@@ -1,46 +1,64 @@
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { clearCart } from "../redux/cartSlice"; // ✅ Import clearCart action
-import { CartItem } from "../redux/cartSlice"; // ✅ Import CartItem type
+import { clearCart } from "../redux/cartSlice";
+import { CartItem } from "../redux/cartSlice";
+import "../App.css";
 
 const OrderDetails: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  // Retrieve cart data from navigation state or use defaults
-  const { cartItems = [], totalAmount = 0, totalPrice = 0 } = location.state || {};
+  const { orderData } = location.state || {};
+
+  if (!orderData) {
+    return <div>No order details available.</div>;
+  }
+
+  const { items, totalAmount, totalPrice } = orderData;
 
   const handleExitOrder = () => {
-    dispatch(clearCart()); // ✅ Clear Redux cart state
-    sessionStorage.removeItem("cart"); // ✅ Remove cart from sessionStorage
-    navigate("/home"); // ✅ Redirect to Home page
+    dispatch(clearCart());
+    sessionStorage.removeItem("cart");
+    navigate("/home");
   };
 
   return (
-    <div>
-      <h2>Order Details</h2>
-      <p>Total Items: {totalAmount}</p>
-      <p>Total Price: ${totalPrice.toFixed(2)}</p>
-      {cartItems.length === 0 ? (
+    <div className="order-details">
+      <h2>Order Confirmation</h2>
+      <div className="order-summary">
+        <p><strong>Total Items:</strong> {totalAmount}</p>
+        <p><strong>Total Price:</strong> ${totalPrice}</p>
+      </div>
+
+      {items.length === 0 ? (
         <p>No order details available.</p>
       ) : (
-        <ul>
-          {cartItems.map((item: CartItem) => ( // ✅ Use CartItem type
-            <li key={item.id}>
-              <img src={item.image} alt={item.name} width={50} />
-              <h3>{item.name}</h3>
-              <p>Price: ${item.price}</p>
-              <p>Quantity: {item.count}</p>
+        <ul className="cart-items-list">
+          {items.map((item: CartItem) => (
+            <li key={item.name} className="cart-item">
+              <img src={item.imageUrl} alt={item.name} width={80} className="cart-item-image" />
+              <div className="cart-item-details">
+                <h3>{item.name}</h3>
+                <p><strong>Price:</strong> ${item.price}</p>
+                <p><strong>Quantity:</strong> {item.count}</p>
+              </div>
             </li>
           ))}
         </ul>
       )}
-      <button onClick={() => navigate("/home")}>Back to Home</button>
-      <button onClick={handleExitOrder} style={{ marginLeft: "10px", backgroundColor: "red", color: "white" }}>
-        Exit Order
-      </button>
+
+      <div className="action-buttons">
+        <button className="back-button" onClick={() => navigate("/home")}>Back to Shop</button>
+        <button
+          className="exit-order-button"
+          onClick={handleExitOrder}
+          style={{ backgroundColor: "red", color: "white" }}
+        >
+          Exit Order
+        </button>
+      </div>
     </div>
   );
 };

@@ -6,16 +6,15 @@ import { Link } from "react-router-dom";
 import { addItemToCart, loadCart } from "../redux/cartSlice";
 import { fetchProducts } from "../components/productService";
 import ProductCard from "./ProductCard";
-import { Product } from "../types/types"; // Ensure Product is imported correctly
-import "../App.css"; // Import the CSS file for styling
+import { Product } from "../types/types";
+import "../App.css";
 
 const Home: React.FC = () => {
-  const [products, setProducts] = useState<Product[]>([]); // Correctly typed as Product[]
+  const [products, setProducts] = useState<Product[]>([]);
   const [selectedCategory, setSelectedCategory] = useState("");
 
   const dispatch = useDispatch();
 
-  // Load cart from sessionStorage on mount
   useEffect(() => {
     const savedCart = sessionStorage.getItem("cart");
     if (savedCart) {
@@ -23,7 +22,6 @@ const Home: React.FC = () => {
     }
   }, [dispatch]);
 
-  // Fetch products from Firestore
   useEffect(() => {
     const loadProducts = async () => {
       try {
@@ -42,13 +40,12 @@ const Home: React.FC = () => {
         id: product.id,
         name: product.name,
         price: product.price,
-        image: product.imageUrl || "",
+        imageUrl: product.imageUrl || "",
         count: 1,
       })
     );
   };
 
-  // Handle category selection change
   const handleCategoryChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setSelectedCategory(event.target.value);
   };
@@ -64,17 +61,14 @@ const Home: React.FC = () => {
   return (
     <div className="home">
       <div className="top-navigation">
-        {/* Profile Button */}
         <Link to="/user-profile" className="profile-button">Profile</Link>
 
-        {/* Cart Icon */}
         <Link to="/cart" className="cart-container">
           <FaShoppingCart className="cart-icon" />
           {cartItemsCount > 0 && <span className="cart-badge">{cartItemsCount}</span>}
         </Link>
       </div>
 
-      {/* Category Filter Dropdown */}
       <div className="category-filter">
         <label htmlFor="category">Filter by Category: </label>
         <select id="category" value={selectedCategory} onChange={handleCategoryChange}>
@@ -85,16 +79,13 @@ const Home: React.FC = () => {
         </select>
       </div>
 
-      {/* Link to Add Product Page */}
       <Link to="/add-product" className="add-product-link">Add New Product</Link>
 
-      {/* Product List */}
       <div className="product-list">
         {filteredProducts.map((product: Product) => (
-          <div key={product.id}>
+          <div key={product.id} className="product-card-container">
             <ProductCard product={product} onAddToCart={handleAddToCart} />
-            {/* Update Product Button */}
-            <Link to={`/update-product/${product.id}`}>
+            <Link to={`/update-product/${product.id}`} className="update-product-button">
               <button>Update Product</button>
             </Link>
           </div>

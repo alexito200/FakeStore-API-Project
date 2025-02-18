@@ -1,5 +1,3 @@
-// userSlice.ts (Redux slice)
-
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface UserProfileProps {
@@ -14,7 +12,7 @@ interface UserState {
 }
 
 const initialState: UserState = {
-  user: JSON.parse(localStorage.getItem("userProfile") || "null"), // Load from localStorage if available
+  user: JSON.parse(localStorage.getItem("userProfile") || "null"),
 };
 
 const userSlice = createSlice({
@@ -23,11 +21,11 @@ const userSlice = createSlice({
   reducers: {
     setUser(state, action: PayloadAction<UserProfileProps>) {
       state.user = action.payload;
-      localStorage.setItem("userProfile", JSON.stringify(action.payload)); // Save to localStorage
+      localStorage.setItem("userProfile", JSON.stringify(action.payload));
     },
     clearUser(state) {
       state.user = null;
-      localStorage.removeItem("userProfile"); // Remove from localStorage
+      localStorage.removeItem("userProfile");
     },
   },
 });

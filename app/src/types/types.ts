@@ -4,6 +4,20 @@ export interface Product {
     price: number;
     imageUrl: string;
     category: string;
-    // description?: string;
-    // quantity?: number
 }
+export interface OrderItem {
+    name: string;
+    price: number;
+    imageUrl: string;
+    quantity: number;
+  }
+  
+  export interface Order {
+    id?: string;
+    items: OrderItem[];
+    totalAmount: number;
+    totalPrice: string;
+    createdAt: Date;
+    status: string;
+  }
+  
