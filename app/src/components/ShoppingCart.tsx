@@ -43,7 +43,7 @@ const ShoppingCart: React.FC = () => {
     if (user) {
       try {
         await saveOrder(orderData, user.uid);
-        navigate('/order-details', { state: { orderData } }); // Pass orderData correctly
+        navigate('/order-details', { state: { orderData } });
       } catch (error) {
         console.error('Error placing order:', error);
       }
