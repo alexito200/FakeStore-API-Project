@@ -6,6 +6,7 @@
     "useDefineForClassFields": true,
     "lib": ["ES2020", "DOM", "DOM.Iterable"],
     "module": "ESNext",
+    "types": ["vitest", "node"],
     "skipLibCheck": true,
 
     /* Bundler mode */
@@ -20,7 +21,7 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true,
+    "noFallthroughCasesInSwitch": true
   },
-  "include": ["src"]
+  "include": ["src", "src/setupTests.ts", "src/**/*.test.ts", "src/**/*.test.tsx"]
 }
