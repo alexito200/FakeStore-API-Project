@@ -38,7 +38,7 @@
 <!-- LIVE PROJECT LINK -->
 ## Live Project
 
-You can access the live project here: **[Live Demo](fake-store-api-project-omega.vercel.app)**
+You can access the live project here: **[Live Demo](https://fake-store-api-project-omega.vercel.app)**
 
 <!-- GETTING STARTED -->
 ## Getting Started
