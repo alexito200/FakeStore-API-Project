@@ -37,7 +37,7 @@ jobs:
 
       # Deployment step (only if build and tests pass)
       - name: Deploy to Vercel
-        if: github.ref == 'refs/heads/main'
+        if: github.ref == 'refs/heads/master'
         uses: amondnet/vercel-action@v20
         with:
           vercel-token: ${{ secrets.VERCEL_TOKEN }}
