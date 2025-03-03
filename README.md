@@ -156,7 +156,7 @@ Firebase: VITE_FIREBASE_API_KEY, VITE_FIREBASE_AUTH_DOMAIN, VITE_FIREBASE_PROJEC
 Vercel: VERCEL_TOKEN, VERCEL_ORG_ID, VERCEL_PROJECT_ID.
 ```
 
-### Workflow File
+<!-- ### Workflow File
 
 ```
 name: CI/CD
@@ -208,6 +208,6 @@ jobs:
           working-directory: app
           vercel-args: '--prod --yes'
 
-```
+``` -->
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
